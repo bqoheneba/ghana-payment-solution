@@ -31,7 +31,7 @@ export function ActivationsPage() {
         <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
           <span style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>MAN Activation Report</span>
         </div>
-        <Table cols={cols} rows={activated as unknown as Record<string, unknown>[]} />
+        <Table cols={cols} rows={activated} />
       </div>
     </div>
   );
@@ -64,7 +64,7 @@ export function DebitsPage() {
         <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
           <span style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>Debit Request Log</span>
         </div>
-        <Table cols={cols} rows={DEBIT_REQUESTS as unknown as Record<string, unknown>[]} />
+        <Table cols={cols} rows={DEBIT_REQUESTS} />
       </div>
     </div>
   );
@@ -102,7 +102,7 @@ export function ProvidersPage() {
         <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
           <span style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>Provider Registry</span>
         </div>
-        <Table cols={cols} rows={PROVIDERS as unknown as Record<string, unknown>[]} onRow={r => setSelected(r as unknown as Provider)} />
+        <Table cols={cols} rows={PROVIDERS} onRow={setSelected} />
       </div>
 
       {/* Detail modal */}
@@ -241,10 +241,11 @@ const USERS = [
   { name: "Finance Lead", email: "finance@gdd.io",  role: "Finance Viewer", status: "active",   last: "2024-01-27 17:30" },
   { name: "API Client",   email: "api@provider.com", role: "Provider API",  status: "inactive", last: "2024-01-20 12:00" },
 ];
+type User = (typeof USERS)[number];
 const ROLES = ["Super Admin", "Operations", "Finance Viewer", "Provider API", "Read Only"];
 
 export function UsersPage() {
-  const cols: ColDef[] = [
+  const cols: ColDef<User>[] = [
     { key: "name",   label: "Name" },
     { key: "email",  label: "Email",  mono: true, dim: true },
     { key: "role",   label: "Role",   render: v => <span style={{ color: "var(--purple)", background: "rgba(168,85,247,0.1)", padding: "2px 8px", borderRadius: 4, fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }}>{String(v)}</span> },
@@ -271,7 +272,7 @@ export function UsersPage() {
             <span style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>Users</span>
             <button style={{ background: "var(--amber)", color: "#000", border: "none", borderRadius: 6, padding: "7px 16px", fontWeight: 700, fontSize: 12, cursor: "pointer" }}>+ Invite User</button>
           </div>
-          <Table cols={cols} rows={USERS as unknown as Record<string, unknown>[]} />
+          <Table cols={cols} rows={USERS} />
         </div>
       </div>
     </div>

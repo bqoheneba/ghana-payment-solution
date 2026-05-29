@@ -79,7 +79,7 @@ export function MandatesPage() {
           <span style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>Mandate Ledger</span>
           <span style={{ fontSize: 12, color: "var(--text-dim)" }}>{filtered.length} records</span>
         </div>
-        <Table cols={cols} rows={filtered as unknown as Record<string, unknown>[]} />
+        <Table cols={cols} rows={filtered} />
       </div>
 
       {/* Create Modal */}
