@@ -71,7 +71,7 @@ export function StatCard({ label, value, sub, accent = "#F5A623", delta }: StatC
 
 // ─── TABLE ────────────────────────────────────────────────────────────────────
 
-export interface ColDef<T = Record<string, unknown>> {
+export interface ColDef<T extends object = Record<string, unknown>> {
   key: keyof T | string;
   label: string;
   mono?: boolean;
@@ -79,13 +79,17 @@ export interface ColDef<T = Record<string, unknown>> {
   render?: (value: unknown, row: T) => React.ReactNode;
 }
 
-interface TableProps<T extends Record<string, unknown>> {
+interface TableProps<T extends object> {
   cols: ColDef<T>[];
   rows: T[];
   onRow?: (row: T) => void;
 }
 
-export function Table<T extends Record<string, unknown>>({ cols, rows, onRow }: TableProps<T>) {
+function cellValue<T extends object>(row: T, key: keyof T | string): unknown {
+  return key in row ? row[key as keyof T] : undefined;
+}
+
+export function Table<T extends object>({ cols, rows, onRow }: TableProps<T>) {
   return (
     <div style={{ overflowX: "auto" }}>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
@@ -120,8 +124,8 @@ export function Table<T extends Record<string, unknown>>({ cols, rows, onRow }: 
                   fontSize: c.mono ? 12 : 13, whiteSpace: "nowrap",
                 }}>
                   {c.render
-                    ? c.render(row[c.key as string], row)
-                    : String(row[c.key as string] ?? "")}
+                    ? c.render(cellValue(row, c.key), row)
+                    : String(cellValue(row, c.key) ?? "")}
                 </td>
               ))}
             </tr>
