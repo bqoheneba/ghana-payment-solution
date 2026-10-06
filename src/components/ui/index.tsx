@@ -1,22 +1,21 @@
 "use client";
 
 import React from "react";
-
-// ─── BADGE ────────────────────────────────────────────────────────────────────
+import { Icon, type IconName } from "@/components/icons";
 
 type BadgeStatus =
   | "active" | "pending" | "suspended" | "inactive" | "degraded"
   | "success" | "failed" | "throttled";
 
 const BADGE_MAP: Record<BadgeStatus, { bg: string; color: string; label: string }> = {
-  active:    { bg: "#0D2818", color: "#22C55E", label: "Active" },
-  pending:   { bg: "#1A1500", color: "#F5A623", label: "Pending" },
-  suspended: { bg: "#1A0808", color: "#EF4444", label: "Suspended" },
-  inactive:  { bg: "#111318", color: "#4A5068", label: "Inactive" },
-  degraded:  { bg: "#1A1000", color: "#FB923C", label: "Degraded" },
-  success:   { bg: "#0D2818", color: "#22C55E", label: "Success" },
-  failed:    { bg: "#1A0808", color: "#EF4444", label: "Failed" },
-  throttled: { bg: "#150D1A", color: "#A855F7", label: "Throttled" },
+  active:    { bg: "var(--badge-active-bg)",    color: "var(--badge-active)",    label: "Active" },
+  pending:   { bg: "var(--badge-pending-bg)",   color: "var(--badge-pending)",   label: "Pending" },
+  suspended: { bg: "var(--badge-suspended-bg)", color: "var(--badge-suspended)", label: "Suspended" },
+  inactive:  { bg: "var(--badge-inactive-bg)",  color: "var(--badge-inactive)",  label: "Inactive" },
+  degraded:  { bg: "var(--badge-degraded-bg)",  color: "var(--badge-degraded)",  label: "Degraded" },
+  success:   { bg: "var(--badge-success-bg)",   color: "var(--badge-success)",   label: "Success" },
+  failed:    { bg: "var(--badge-failed-bg)",    color: "var(--badge-failed)",    label: "Failed" },
+  throttled: { bg: "var(--badge-throttled-bg)", color: "var(--badge-throttled)", label: "Throttled" },
 };
 
 export function Badge({ status }: { status: string }) {
@@ -24,10 +23,8 @@ export function Badge({ status }: { status: string }) {
   return (
     <span style={{
       background: s.bg, color: s.color,
-      border: `1px solid ${s.color}30`,
-      borderRadius: 4, padding: "2px 8px",
-      fontSize: 11, fontWeight: 600, letterSpacing: "0.06em",
-      textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace",
+      borderRadius: 20, padding: "4px 10px",
+      fontSize: 11, fontWeight: 600,
       whiteSpace: "nowrap",
     }}>
       {s.label}
@@ -35,41 +32,45 @@ export function Badge({ status }: { status: string }) {
   );
 }
 
-// ─── STAT CARD ────────────────────────────────────────────────────────────────
-
 interface StatCardProps {
   label: string;
   value: string | number;
   sub?: string;
   accent?: string;
   delta?: number;
+  icon?: IconName;
 }
 
-export function StatCard({ label, value, sub, accent = "#F5A623", delta }: StatCardProps) {
+export function StatCard({ label, value, sub, accent = "var(--accent)", delta, icon }: StatCardProps) {
   return (
-    <div style={{
-      background: "var(--surface)", border: "1px solid var(--border)",
-      borderRadius: 8, padding: "20px 24px",
-      display: "flex", flexDirection: "column", gap: 6,
-      position: "relative", overflow: "hidden",
+    <div className="card" style={{
+      padding: "22px 24px",
+      display: "flex", flexDirection: "column", gap: 8,
+      position: "relative",
     }}>
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: 2,
-        background: accent, opacity: 0.7,
-      }} />
-      <span style={{ fontSize: 11, color: "var(--text-mid)", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>{label}</span>
-      <span style={{ fontSize: 28, fontWeight: 700, color: "var(--text)", fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "-0.02em" }}>{value}</span>
-      {sub && <span style={{ fontSize: 12, color: "var(--text-dim)" }}>{sub}</span>}
-      {delta !== undefined && (
-        <span style={{ fontSize: 12, color: delta > 0 ? "var(--green)" : "var(--red)" }}>
-          {delta > 0 ? "↑" : "↓"} {Math.abs(delta)}% today
+      {icon && (
+        <span style={{
+          position: "absolute", top: 18, right: 18,
+          width: 36, height: 36, borderRadius: 12,
+          background: "var(--accent-dim)", color: accent,
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <Icon name={icon} size={16} />
         </span>
       )}
+      <span style={{ fontSize: 13, color: "var(--text-mid)", fontWeight: 500, paddingRight: icon ? 44 : 0 }}>{label}</span>
+      <span style={{ fontSize: 26, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.03em", fontVariantNumeric: "tabular-nums" }}>{value}</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, minHeight: 18 }}>
+        {sub && <span style={{ fontSize: 12, color: "var(--text-dim)" }}>{sub}</span>}
+        {delta !== undefined && (
+          <span style={{ fontSize: 12, fontWeight: 600, color: delta > 0 ? "var(--green)" : "var(--red)" }}>
+            {delta > 0 ? "+" : "−"}{Math.abs(delta)}%
+          </span>
+        )}
+      </div>
     </div>
   );
 }
-
-// ─── TABLE ────────────────────────────────────────────────────────────────────
 
 export interface ColDef<T extends object = Record<string, unknown>> {
   key: keyof T | string;
@@ -97,11 +98,9 @@ export function Table<T extends object>({ cols, rows, onRow }: TableProps<T>) {
           <tr>
             {cols.map(c => (
               <th key={String(c.key)} style={{
-                textAlign: "left", padding: "10px 16px",
-                color: "var(--text-dim)", fontWeight: 600, fontSize: 11,
-                letterSpacing: "0.08em", textTransform: "uppercase",
-                borderBottom: "1px solid var(--border)",
-                fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap",
+                textAlign: "left", padding: "12px 20px",
+                color: "var(--text-mid)", fontWeight: 500, fontSize: 12,
+                borderBottom: "1px solid var(--border)", whiteSpace: "nowrap",
               }}>{c.label}</th>
             ))}
           </tr>
@@ -117,11 +116,11 @@ export function Table<T extends object>({ cols, rows, onRow }: TableProps<T>) {
             >
               {cols.map(c => (
                 <td key={String(c.key)} style={{
-                  padding: "12px 16px",
+                  padding: "14px 20px",
                   borderBottom: "1px solid var(--border)",
                   color: c.dim ? "var(--text-mid)" : "var(--text)",
-                  fontFamily: c.mono ? "'IBM Plex Mono', monospace" : "inherit",
-                  fontSize: c.mono ? 12 : 13, whiteSpace: "nowrap",
+                  fontVariantNumeric: c.mono ? "tabular-nums" : "normal",
+                  fontSize: 13, whiteSpace: "nowrap",
                 }}>
                   {c.render
                     ? c.render(cellValue(row, c.key), row)
@@ -136,8 +135,6 @@ export function Table<T extends object>({ cols, rows, onRow }: TableProps<T>) {
   );
 }
 
-// ─── MODAL ────────────────────────────────────────────────────────────────────
-
 interface ModalProps { title: string; onClose: () => void; children: React.ReactNode; }
 
 export function Modal({ title, onClose, children }: ModalProps) {
@@ -145,46 +142,38 @@ export function Modal({ title, onClose, children }: ModalProps) {
     <div
       style={{
         position: "fixed", inset: 0, zIndex: 100,
-        background: "rgba(0,0,0,0.75)", backdropFilter: "blur(4px)",
+        background: "var(--overlay)",
         display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
       }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div style={{
-        background: "var(--surface)", border: "1px solid var(--border-hi)",
-        borderRadius: 12, width: "100%", maxWidth: 560, maxHeight: "90vh", overflow: "auto",
-      }}>
+      <div className="card" style={{ width: "100%", maxWidth: 560, maxHeight: "90vh", overflow: "auto" }}>
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "20px 24px", borderBottom: "1px solid var(--border)",
+          padding: "20px 24px",
         }}>
-          <span style={{ fontWeight: 700, fontSize: 16, color: "var(--text)" }}>{title}</span>
-          <button onClick={onClose} style={{
-            background: "none", border: "none", color: "var(--text-mid)",
-            cursor: "pointer", fontSize: 20, lineHeight: 1, padding: 4,
-          }}>✕</button>
+          <span style={{ fontWeight: 650, fontSize: 18, color: "var(--text)" }}>{title}</span>
+          <button onClick={onClose} className="icon-btn" style={{ width: 36, height: 36, boxShadow: "none" }} aria-label="Close">
+            <Icon name="x" size={16} />
+          </button>
         </div>
-        <div style={{ padding: 24 }}>{children}</div>
+        <div style={{ padding: "0 24px 24px" }}>{children}</div>
       </div>
     </div>
   );
 }
-
-// ─── FIELD ───────────────────────────────────────────────────────────────────
 
 interface FieldProps { label: string; hint?: string; children: React.ReactNode; }
 
 export function Field({ label, hint, children }: FieldProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <label style={{ fontSize: 12, color: "var(--text-mid)", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>{label}</label>
+      <label style={{ fontSize: 13, color: "var(--text-mid)", fontWeight: 500 }}>{label}</label>
       {children}
-      {hint && <span style={{ fontSize: 11, color: "var(--text-dim)" }}>{hint}</span>}
+      {hint && <span style={{ fontSize: 12, color: "var(--text-dim)" }}>{hint}</span>}
     </div>
   );
 }
-
-// ─── INPUT ───────────────────────────────────────────────────────────────────
 
 interface InputProps {
   value?: string | number;
@@ -192,25 +181,33 @@ interface InputProps {
   placeholder?: string;
   type?: string;
   readOnly?: boolean;
+  required?: boolean;
+  autoComplete?: string;
+  minLength?: number;
+  name?: string;
+  disabled?: boolean;
 }
 
-export function Input({ value, onChange, placeholder, type = "text", readOnly }: InputProps) {
+export function Input({
+  value, onChange, placeholder, type = "text", readOnly,
+  required, autoComplete, minLength, name, disabled,
+}: InputProps) {
   return (
     <input
+      className="field-control"
       type={type} value={value} onChange={onChange}
       placeholder={placeholder} readOnly={readOnly}
+      required={required} autoComplete={autoComplete}
+      minLength={minLength} name={name} disabled={disabled}
       style={{
-        background: "var(--bg)", border: "1px solid var(--border-hi)",
-        borderRadius: 6, padding: "10px 12px",
-        color: readOnly ? "var(--text-mid)" : "var(--text)", fontSize: 13,
-        fontFamily: "'IBM Plex Mono', monospace",
+        background: "var(--surface-b)", border: "1px solid var(--border)",
+        borderRadius: "var(--radius-sm)", padding: "11px 14px",
+        color: "var(--text)", fontSize: 13,
         outline: "none", width: "100%",
       }}
     />
   );
 }
-
-// ─── SELECT ──────────────────────────────────────────────────────────────────
 
 interface SelectProps {
   value: string;
@@ -220,12 +217,11 @@ interface SelectProps {
 
 export function Select({ value, onChange, options }: SelectProps) {
   return (
-    <select value={value} onChange={onChange} style={{
-      background: "var(--bg)", border: "1px solid var(--border-hi)",
-      borderRadius: 6, padding: "10px 12px",
+    <select className="field-control" value={value} onChange={onChange} style={{
+      background: "var(--surface-b)", border: "1px solid var(--border)",
+      borderRadius: "var(--radius-sm)", padding: "11px 14px",
       color: "var(--text)", fontSize: 13, outline: "none",
       width: "100%", cursor: "pointer",
-      fontFamily: "'IBM Plex Mono', monospace",
     }}>
       {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
     </select>
