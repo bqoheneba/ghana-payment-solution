@@ -3,7 +3,7 @@ type IconName =
   | "chart" | "users" | "settings" | "search" | "bell" | "sun"
   | "moon" | "logout" | "chevron-left" | "chevron-right" | "chevron-down"
   | "plus" | "x" | "check" | "activity" | "alert" | "wallet"
-  | "sidebar-collapse" | "sidebar-expand";
+  | "sidebar-collapse" | "sidebar-expand" | "menu";
 
 interface IconProps {
   name: IconName;
@@ -36,6 +36,7 @@ const PATHS: Record<IconName, string> = {
   wallet: "M4 7.5A1.5 1.5 0 0 1 5.5 6H18a2 2 0 0 1 2 2v10.5A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5zM18 10.5h2.5v4H18a2 2 0 0 1 0-4z",
   "sidebar-collapse": "M5 5h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM9.5 5v14M15.2 9.2 12.5 12l2.7 2.8",
   "sidebar-expand": "M5 5h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM9.5 5v14M12.8 9.2 15.5 12l-2.7 2.8",
+  menu: "M4 7h16M4 12h16M4 17h16",
 };
 
 export function Icon({ name, size = 20 }: IconProps) {

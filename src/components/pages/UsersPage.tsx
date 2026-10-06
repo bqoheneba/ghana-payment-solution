@@ -73,7 +73,7 @@ export function UsersPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 18 }}>
+      <div className="split-aside">
         <div className="card" style={{ padding: 8 }}>
           <div className="card-head">
             <span className="card-title">RBAC Roles</span>

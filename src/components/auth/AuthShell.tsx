@@ -39,12 +39,7 @@ export function AuthShell({ title, subtitle, children, portal = "gdd" }: AuthShe
       data-portal={portal === "gdd" ? undefined : portal}
       data-bank={portal === "bank" ? "FNB" : undefined}
     >
-      <aside className="auth-aside" style={{
-        padding: 56,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-      }}>
+      <aside className="auth-aside">
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{
             width: 40, height: 40, borderRadius: 12,
@@ -81,7 +76,7 @@ export function AuthShell({ title, subtitle, children, portal = "gdd" }: AuthShe
               <span>GDD GHS 30</span>
             </div>
           </div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.2, margin: "28px 0 12px" }}>
+          <h1 style={{ fontSize: "clamp(24px, 4vw, 32px)", fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.2, margin: "28px 0 12px" }}>
             {aside.headline}
           </h1>
           <p style={{ fontSize: 15, lineHeight: 1.6, opacity: 0.85, maxWidth: 380 }}>
@@ -94,17 +89,12 @@ export function AuthShell({ title, subtitle, children, portal = "gdd" }: AuthShe
         </div>
       </aside>
 
-      <main style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 32,
-      }}>
-        <div style={{ width: "100%", maxWidth: 380 }}>
+      <main className="auth-main">
+        <div className="auth-panel">
           <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 24 }}>
             <ThemeToggle />
           </div>
-          <h2 style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.03em", marginBottom: 8 }}>{title}</h2>
+          <h2 style={{ fontSize: "clamp(22px, 5vw, 26px)", fontWeight: 700, letterSpacing: "-0.03em", marginBottom: 8 }}>{title}</h2>
           <p style={{ fontSize: 14, color: "var(--text-mid)", marginBottom: 28 }}>{subtitle}</p>
           {children}
         </div>

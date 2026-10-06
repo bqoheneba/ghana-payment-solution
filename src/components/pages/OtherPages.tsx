@@ -31,7 +31,7 @@ export function ActivationsPage({ onSelect }: { onSelect?: (ref: string) => void
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 18 }}>
+      <div className="stat-row">
         <StatCard label="Validated" value={activated.length} accent="var(--green)" icon="check-circle" />
         <StatCard label="GDD share" value={fmt(shares.gdd)} sub={`${fmt(FEE_GDD)} of ${fmt(ACTIVATION_FEE)}`} accent="var(--accent)" icon="wallet" />
         <StatCard label="Sending banks" value={fmt(shares.sending)} sub={`${fmt(FEE_SENDING_BANK)} each`} icon="bank" />
@@ -66,7 +66,7 @@ export function DebitsPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 18 }}>
+      <div className="stat-row">
         <StatCard label="Instructions" value={debits.length} icon="swap" />
         <StatCard label="Honoured"     value={debits.filter(d => d.status === "success").length}   accent="var(--green)" icon="check-circle" />
         <StatCard label="Failed"       value={debits.filter(d => d.status === "failed").length}    accent="var(--red)" icon="alert" />
@@ -155,7 +155,7 @@ export function ProvidersPage() {
       {selected && stats && selectedCreds && (
         <Modal title={selected.name} onClose={() => { setSelectedId(null); setNewIp(""); setError(null); }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div className="split-2">
               {[
                 ["Bank ID", selected.id],
                 ["API status", selected.status],
@@ -267,11 +267,7 @@ export function BankLogsPage() {
         </div>
         <div>
           {logs.map((l, i) => (
-            <div key={`${l.ts}-${l.ref}-${l.event}-${i}`} style={{
-              padding: "12px 24px", display: "flex", alignItems: "center", gap: 16,
-              borderTop: "1px solid var(--border)",
-              fontSize: 13, fontVariantNumeric: "tabular-nums",
-            }}>
+            <div key={`${l.ts}-${l.ref}-${l.event}-${i}`} className="log-row">
               <span style={{ color: "var(--text-dim)", minWidth: 64 }}>{l.ts}</span>
               <span style={{ color: "var(--accent)", fontWeight: 600, minWidth: 60 }}>{l.provider}</span>
               <span className="dir-chip" style={{
@@ -321,7 +317,7 @@ export function RevenuePage() {
           <option value="today">Today</option>
         </select>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 18 }}>
+      <div className="stat-row">
         <StatCard label="Fees collected"     value={fmt(shares.collected)} sub={`${activated.length} × ${fmt(ACTIVATION_FEE)}`} icon="wallet" />
         <StatCard label="GDD platform"       value={fmt(shares.gdd)}       sub={`${fmt(FEE_GDD)} per activation`} accent="var(--accent)" icon="chart" />
         <StatCard label="Sending banks"      value={fmt(shares.sending)}   sub={`${fmt(FEE_SENDING_BANK)} per activation`} icon="bank" />

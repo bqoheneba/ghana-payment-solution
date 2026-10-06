@@ -144,9 +144,9 @@ export function CreateMandatePage({
             : `Create a mandate for ${institutionName(origin)} and send it to GDD. GDD validates it, then instructs the sending bank.`}
       </p>
 
-      <section className="card" style={{ padding: 24 }}>
+      <section className="card card-pad">
         <div className="card-title" style={{ marginBottom: 18 }}>Customer</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        <div className="form-grid">
           {onBehalf && (
             <div style={{ gridColumn: "1 / -1" }}>
               <Field label="Institution" hint="The originator this mandate is created for">
@@ -179,9 +179,9 @@ export function CreateMandatePage({
         </div>
       </section>
 
-      <section className="card" style={{ padding: 24 }}>
+      <section className="card card-pad">
         <div className="card-title" style={{ marginBottom: 18 }}>Mandate</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        <div className="form-grid">
           <Field label="Sending bank" hint="Customer’s bank. Honours the debit after GDD validates.">
             <Select
               value={form.sendingBank}

@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Sidebar } from "@/components/Sidebar";
-import { Topbar } from "@/components/Topbar";
+import { DashShell } from "@/components/DashShell";
 import { MandateDetailPage } from "@/components/pages/MandateDetailPage";
 import { SettingsPage } from "@/components/pages/SettingsPage";
 import { InstitutionOverviewPage, InstitutionMandatesPage } from "@/components/institution/InstitutionPages";
@@ -59,27 +58,21 @@ export function InstitutionDashboard() {
     : <SettingsPage />;
 
   return (
-    <div data-portal="institution" style={{ display: "flex", height: "100vh", overflow: "hidden", background: "var(--bg)", color: "var(--text)" }}>
-      <Sidebar
-        page={page}
-        items={INST_NAV}
-        brand={institutionId}
-        subtitle="Institution"
-        onNavigate={go}
-      />
-      <main style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-        <Topbar
-          heading={heading}
-          badge={name}
-          onSelect={ref => {
-            setEditing(false);
-            setMandateRef(ref);
-          }}
-        />
-        <div className="dash-body">
-          {content}
-        </div>
-      </main>
-    </div>
+    <DashShell
+      page={page}
+      items={INST_NAV}
+      brand={institutionId}
+      subtitle="Institution"
+      onNavigate={go}
+      heading={heading}
+      badge={name}
+      onSelect={ref => {
+        setEditing(false);
+        setMandateRef(ref);
+      }}
+      portal="institution"
+    >
+      {content}
+    </DashShell>
   );
 }

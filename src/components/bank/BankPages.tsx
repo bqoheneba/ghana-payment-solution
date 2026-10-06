@@ -37,20 +37,20 @@ export function BankOverviewPage({ bankId, bankName }: { bankId: string; bankNam
       <p style={{ fontSize: 13, color: "var(--text-mid)", lineHeight: 1.5 }}>
         {bankName} on the GDD scheme. Honour instructions debit your customers. Received mandates credit accounts at {bankName}.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 18 }}>
+      <div className="stat-row">
         <StatCard label="Honoured" value={honoured.length} sub="You are the sending bank" icon="swap" />
         <StatCard label="Received" value={received.length} sub="You are the corresponding bank" accent="var(--purple)" icon="check-circle" />
         <StatCard label="Instructions" value={debits.length} sub={`${debits.filter(d => d.status === "success").length} honoured`} accent="var(--blue)" icon="list" />
         <StatCard label="Fee income" value={fmt(fees.total)} sub={`${fmt(FEE_SENDING_BANK)} per activation`} accent="var(--accent)" icon="wallet" />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+      <div className="split-2">
         <div className="card">
           <div className="card-head"><span className="card-title">Failed instructions</span></div>
           <div style={{ padding: "4px 12px 16px" }}>
             {failed.length === 0 && <div style={{ padding: 12, fontSize: 13, color: "var(--text-mid)" }}>No failed instructions.</div>}
             {failed.map(d => (
-              <div key={d.id} style={{ padding: 12, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div key={d.id} className="stack-row" style={{ padding: 12 }}>
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 600 }}>{d.customer}</div>
                   <div style={{ fontSize: 12, color: "var(--text-mid)", marginTop: 3 }}>{d.id} · {d.reason}</div>
@@ -64,10 +64,7 @@ export function BankOverviewPage({ bankId, bankName }: { bankId: string; bankNam
           <div className="card-head"><span className="card-title">Your API log</span></div>
           <div>
             {logs.slice(0, 6).map((l, i) => (
-              <div key={`${l.ts}-${l.ref}-${i}`} style={{
-                padding: "12px 24px", display: "flex", gap: 12, alignItems: "center",
-                borderTop: "1px solid var(--border)", fontSize: 13,
-              }}>
+              <div key={`${l.ts}-${l.ref}-${i}`} className="log-row">
                 <span style={{ color: "var(--text-dim)", minWidth: 56 }}>{l.ts}</span>
                 <span className="dir-chip" style={{
                   color: l.direction === "IN" ? "var(--blue)" : "var(--purple)",
@@ -161,7 +158,7 @@ export function BankFeesPage({ bankId }: { bankId: string }) {
   const rows = bankActivationFees(scheme, bankId);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
+      <div className="stat-row">
         <StatCard label="Your fee income" value={fmt(fees.total)} sub={`${rows.length} activations × ${fmt(FEE_SENDING_BANK)}`} icon="wallet" />
         <StatCard label="As sending bank" value={fmt(fees.sendingFees)} sub={`${fees.sendingCount} × ${fmt(FEE_SENDING_BANK)}`} accent="var(--accent)" icon="swap" />
         <StatCard label="As receiving bank" value={fmt(fees.receivingFees)} sub={`${fees.receivingCount} × ${fmt(FEE_RECEIVING_BANK)}`} accent="var(--purple)" icon="check-circle" />

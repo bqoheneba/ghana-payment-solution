@@ -72,7 +72,7 @@ export function MandateDetailPage({ mandateRef, onBack, onEdit, viewer = "gdd", 
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+      <div className="page-head">
         <button
           type="button"
           onClick={onBack}
@@ -86,7 +86,7 @@ export function MandateDetailPage({ mandateRef, onBack, onEdit, viewer = "gdd", 
         >
           <Icon name="chevron-left" size={18} />
         </button>
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="page-head-copy">
           <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: "-0.03em" }}>{mandate.customer}</div>
           <div style={{ fontSize: 13, color: "var(--text-mid)", marginTop: 2, fontVariantNumeric: "tabular-nums" }}>
             {mandate.ref} · {institutionName(mandate.institution)}
@@ -111,7 +111,7 @@ export function MandateDetailPage({ mandateRef, onBack, onEdit, viewer = "gdd", 
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 18 }}>
+      <div className="stat-row">
         <StatCard label="Max debit" value={fmt(mandate.amount)} sub={`${frequencyLabel(mandate.frequency)} · ${mandate.start} – ${mandate.end}`} icon="wallet" />
         <StatCard label="Honour requests" value={debits.length} sub={`${debits.filter(d => d.status === "success").length} successful`} icon="swap" />
         <StatCard label="Moved to receiving bank" value={fmt(settled)} sub={bankName(scheme, mandate.receivingBank)} accent="var(--green)" icon="chart" />
@@ -136,10 +136,10 @@ export function MandateDetailPage({ mandateRef, onBack, onEdit, viewer = "gdd", 
         />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+      <div className="split-2">
         <div className="card">
           <div className="card-head"><span className="card-title">Customer & account</span></div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, padding: "0 24px 24px" }}>
+          <div className="form-grid" style={{ padding: "0 24px 24px" }}>
             <DetailItem label="Account name" value={mandate.accountName} />
             <DetailItem label="Account number" value={mandate.account} />
             <DetailItem label="Phone" value={mandate.phone} />
@@ -168,7 +168,7 @@ export function MandateDetailPage({ mandateRef, onBack, onEdit, viewer = "gdd", 
             <span className="card-title">Activation fee split</span>
             <span style={{ fontSize: 12, color: "var(--text-mid)" }}>{fmt(ACTIVATION_FEE)} charged to the customer</span>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, padding: "0 24px 24px" }}>
+          <div className="split-3" style={{ padding: "0 24px 24px" }}>
             <DetailItem label="Sending bank" value={fmt(FEE_SENDING_BANK)} />
             <DetailItem label="GDD platform" value={fmt(FEE_GDD)} />
             <DetailItem label="Receiving bank" value={fmt(FEE_RECEIVING_BANK)} />
@@ -192,11 +192,7 @@ export function MandateDetailPage({ mandateRef, onBack, onEdit, viewer = "gdd", 
             <span className="card-title">Related API logs</span>
           </div>
           {logs.length ? logs.map((l, i) => (
-            <div key={`${l.ts}-${l.ref}-${i}`} style={{
-              padding: "12px 24px", display: "flex", alignItems: "center", gap: 16,
-              borderTop: "1px solid var(--border)",
-              fontSize: 13, fontVariantNumeric: "tabular-nums",
-            }}>
+            <div key={`${l.ts}-${l.ref}-${i}`} className="log-row">
               <span style={{ color: "var(--text-dim)", minWidth: 64 }}>{l.ts}</span>
               <span style={{ color: "var(--accent)", fontWeight: 600, minWidth: 72 }}>{l.provider}</span>
               <span className="dir-chip" style={{
