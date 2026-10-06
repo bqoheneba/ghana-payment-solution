@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Sidebar } from "@/components/Sidebar";
-import { Topbar } from "@/components/Topbar";
+import { DashShell } from "@/components/DashShell";
 import { MandateDetailPage } from "@/components/pages/MandateDetailPage";
 import { SettingsPage } from "@/components/pages/SettingsPage";
 import { BankOverviewPage, BankMandatesPage, BankInstructionsPage, BankFeesPage } from "@/components/bank/BankPages";
@@ -49,20 +48,19 @@ export function BankDashboard() {
     : <SettingsPage />;
 
   return (
-    <div data-portal="bank" data-bank={bankId} style={{ display: "flex", height: "100vh", overflow: "hidden", background: "var(--bg)", color: "var(--text)" }}>
-      <Sidebar
-        page={page}
-        items={BANK_NAV}
-        brand={bankId}
-        subtitle="Provider"
-        onNavigate={go}
-      />
-      <main style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-        <Topbar heading={heading} badge={name} onSelect={setMandateRef} />
-        <div className="dash-body">
-          {content}
-        </div>
-      </main>
-    </div>
+    <DashShell
+      page={page}
+      items={BANK_NAV}
+      brand={bankId}
+      subtitle="Provider"
+      onNavigate={go}
+      heading={heading}
+      badge={name}
+      onSelect={setMandateRef}
+      portal="bank"
+      bankId={bankId}
+    >
+      {content}
+    </DashShell>
   );
 }

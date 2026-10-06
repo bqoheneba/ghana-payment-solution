@@ -17,7 +17,7 @@ export function AuthGate({ children, portal }: { children: ReactNode; portal: Po
   if (!isReady || !user || portalFor(user) !== portal) {
     return (
       <div style={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

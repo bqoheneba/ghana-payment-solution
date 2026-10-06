@@ -36,7 +36,7 @@ export function InstitutionOverviewPage({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
+      <div className="page-toolbar">
         <p style={{ fontSize: 13, color: "var(--text-mid)", lineHeight: 1.5, maxWidth: 560 }}>
           {name} originates mandates here, then sends them to GDD for validation. GDD instructs the sending bank. You do not honour or receive the debit.
         </p>
@@ -44,7 +44,7 @@ export function InstitutionOverviewPage({
           New mandate
         </button>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 18 }}>
+      <div className="stat-row">
         <StatCard label="Your mandates" value={rows.length} icon="file" />
         <StatCard label="Sent to GDD" value={pending.length} sub="Awaiting validation" accent="var(--purple)" icon="alert" />
         <StatCard label="Validated" value={active.length} sub="Banks instructed" accent="var(--green)" icon="check-circle" />

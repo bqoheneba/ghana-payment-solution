@@ -12,7 +12,7 @@ export function DebitRowActions({ debit, bankId }: { debit: DebitRequest; bankId
 
   if (sending && debit.status === "pending") {
     return (
-      <div style={{ display: "flex", gap: 8 }} onClick={stop}>
+      <div style={{ display: "flex", gap: 8 }} className="actions-row" onClick={stop}>
         <button type="button" className="btn-success" style={{ padding: "8px 12px", fontSize: 12 }} onClick={() => honourDebit(debit.id)}>
           Honour
         </button>

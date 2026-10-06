@@ -26,7 +26,7 @@ export function DashboardPage() {
         <StatCard label="GDD fee share"      value={fmt(gddFees)}      sub={`${fmt(FEE_GDD)} of ${fmt(ACTIVATION_FEE)} activation`} accent="var(--accent)" icon="wallet" />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+      <div className="split-2">
         <div className="card">
           <div className="card-head">
             <span className="card-title">Failed honour instructions</span>
@@ -36,7 +36,7 @@ export function DashboardPage() {
               <div style={{ padding: 12, fontSize: 13, color: "var(--text-mid)" }}>No failed instructions.</div>
             )}
             {debits.filter(d => d.status === "failed" || d.status === "throttled").map(d => (
-              <div key={d.id} style={{ padding: "12px", borderRadius: 12, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div key={d.id} className="stack-row" style={{ padding: "12px", borderRadius: 12 }}>
                 <div>
                   <div style={{ fontSize: 14, color: "var(--text)", fontWeight: 600 }}>{d.customer}</div>
                   <div style={{ fontSize: 12, color: "var(--text-mid)", marginTop: 3 }}>
@@ -55,7 +55,7 @@ export function DashboardPage() {
           </div>
           <div style={{ padding: "4px 12px 16px" }}>
             {providers.map(p => (
-              <div key={p.id} style={{ padding: "12px", borderRadius: 12, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div key={p.id} className="stack-row" style={{ padding: "12px", borderRadius: 12 }}>
                 <div>
                   <div style={{ fontSize: 14, color: "var(--text)", fontWeight: 600 }}>{p.name}</div>
                   <div style={{ fontSize: 12, color: "var(--text-mid)", marginTop: 3 }}>
@@ -76,11 +76,7 @@ export function DashboardPage() {
         </div>
         <div>
           {logs.slice(0, 5).map((l, i) => (
-            <div key={`${l.ts}-${l.ref}-${i}`} style={{
-              padding: "12px 24px", display: "flex", alignItems: "center", gap: 16,
-              borderTop: "1px solid var(--border)",
-              fontSize: 13, fontVariantNumeric: "tabular-nums",
-            }}>
+            <div key={`${l.ts}-${l.ref}-${i}`} className="log-row">
               <span style={{ color: "var(--text-dim)", minWidth: 64 }}>{l.ts}</span>
               <span style={{ color: "var(--accent)", fontWeight: 600, minWidth: 72 }}>{l.provider}</span>
               <span className="dir-chip" style={{

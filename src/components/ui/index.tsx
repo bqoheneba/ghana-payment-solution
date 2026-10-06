@@ -92,16 +92,12 @@ function cellValue<T extends object>(row: T, key: keyof T | string): unknown {
 
 export function Table<T extends object>({ cols, rows, onRow }: TableProps<T>) {
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+    <div className="table-scroll">
+      <table className="data-table">
         <thead>
           <tr>
             {cols.map(c => (
-              <th key={String(c.key)} style={{
-                textAlign: "left", padding: "12px 20px",
-                color: "var(--text-mid)", fontWeight: 500, fontSize: 12,
-                borderBottom: "1px solid var(--border)", whiteSpace: "nowrap",
-              }}>{c.label}</th>
+              <th key={String(c.key)}>{c.label}</th>
             ))}
           </tr>
         </thead>
@@ -115,13 +111,13 @@ export function Table<T extends object>({ cols, rows, onRow }: TableProps<T>) {
               onMouseLeave={e => { (e.currentTarget as HTMLTableRowElement).style.background = "transparent"; }}
             >
               {cols.map(c => (
-                <td key={String(c.key)} style={{
-                  padding: "14px 20px",
-                  borderBottom: "1px solid var(--border)",
-                  color: c.dim ? "var(--text-mid)" : "var(--text)",
-                  fontVariantNumeric: c.mono ? "tabular-nums" : "normal",
-                  fontSize: 13, whiteSpace: "nowrap",
-                }}>
+                <td
+                  key={String(c.key)}
+                  style={{
+                    color: c.dim ? "var(--text-mid)" : "var(--text)",
+                    fontVariantNumeric: c.mono ? "tabular-nums" : "normal",
+                  }}
+                >
                   {c.render
                     ? c.render(cellValue(row, c.key), row)
                     : String(cellValue(row, c.key) ?? "")}
@@ -140,10 +136,11 @@ interface ModalProps { title: string; onClose: () => void; children: React.React
 export function Modal({ title, onClose, children }: ModalProps) {
   return (
     <div
+      className="modal-overlay"
       style={{
         position: "fixed", inset: 0, zIndex: 100,
         background: "var(--overlay)",
-        display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
+        display: "flex", alignItems: "center", justifyContent: "center",
       }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >

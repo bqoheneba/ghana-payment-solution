@@ -59,10 +59,10 @@ export function SettingsPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 720 }}>
-      <section className="card" style={{ padding: 24 }}>
+      <section className="card card-pad">
         <div className="card-title" style={{ marginBottom: 18 }}>Profile</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="form-grid">
             <Field label="Full name">
               <Input value={user?.name ?? ""} readOnly />
             </Field>
@@ -76,7 +76,7 @@ export function SettingsPage() {
         </div>
       </section>
 
-      <section className="card" style={{ padding: 24 }}>
+      <section className="card card-pad">
         <div className="card-title" style={{ marginBottom: 18 }}>Appearance</div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
           <div>
@@ -91,7 +91,7 @@ export function SettingsPage() {
         </div>
       </section>
 
-      <section className="card" style={{ padding: 24 }}>
+      <section className="card card-pad">
         <div className="card-title" style={{ marginBottom: 18 }}>Notifications</div>
         <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "var(--text)", marginBottom: 12, cursor: "pointer" }}>
           <input type="checkbox" checked={queueAlerts} onChange={e => setQueueAlerts(e.target.checked)} />

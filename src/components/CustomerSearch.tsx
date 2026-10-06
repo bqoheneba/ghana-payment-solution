@@ -66,7 +66,7 @@ export function CustomerSearch({ onSelect }: { onSelect: (ref: string) => void }
   };
 
   return (
-    <div ref={rootRef} className="customer-search">
+    <div ref={rootRef} className={`customer-search${query ? " has-query" : ""}`}>
       <span className="customer-search-icon">
         <Icon name="search" size={16} />
       </span>

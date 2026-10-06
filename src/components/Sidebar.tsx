@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SidebarAccount } from "@/components/SidebarAccount";
 import { Icon, type IconName } from "@/components/icons";
 
@@ -29,6 +29,7 @@ interface SidebarProps {
   items?: readonly SidebarItem[];
   brand?: string;
   subtitle?: string;
+  open?: boolean;
 }
 
 export function Sidebar({
@@ -36,108 +37,80 @@ export function Sidebar({
   items = NAV_ITEMS,
   brand = "GDD",
   subtitle = "Direct Debit",
+  open = false,
 }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 1024px)");
+    const apply = () => setMobile(query.matches);
+    apply();
+    query.addEventListener("change", apply);
+    return () => query.removeEventListener("change", apply);
+  }, []);
+
+  const compact = collapsed && !mobile;
 
   return (
-    <nav style={{
-      width: collapsed ? 84 : 250, flexShrink: 0, zIndex: 2,
-      background: "var(--nav-bg)",
-      display: "flex", flexDirection: "column",
-      transition: "width 0.2s ease",
-      overflow: "hidden",
-    }}>
-      <div style={{
-        padding: collapsed ? "20px 12px 16px" : "20px 16px 16px",
-        display: "flex", alignItems: "center", gap: 10,
-        justifyContent: collapsed ? "center" : "space-between",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: 12, flexShrink: 0,
-            background: "var(--accent)", display: "flex",
-            alignItems: "center", justifyContent: "center", color: "var(--on-accent)",
-          }}>
+    <nav className={`sidebar${compact ? " collapsed" : ""}${open ? " open" : ""}`}>
+      <div className={`sidebar-brand${compact ? " compact" : ""}`}>
+        <div className="sidebar-brand-copy">
+          <div className="sidebar-mark">
             <Icon name="bank" size={18} />
           </div>
-          {!collapsed && (
+          {!compact && (
             <div>
-              <div style={{ fontWeight: 700, fontSize: 18, color: "var(--nav-text)", letterSpacing: "-0.03em", lineHeight: 1 }}>{brand}</div>
-              <div style={{ fontSize: 11, color: "var(--nav-muted)", marginTop: 3 }}>{subtitle}</div>
+              <div className="sidebar-title">{brand}</div>
+              <div className="sidebar-sub">{subtitle}</div>
             </div>
           )}
         </div>
-        {!collapsed && (
+        {!compact && (
           <button
             type="button"
+            className="sidebar-collapse"
             onClick={() => setCollapsed(true)}
             aria-label="Collapse sidebar"
             title="Collapse sidebar"
-            style={{
-              width: 32, height: 32, flexShrink: 0,
-              border: "none", borderRadius: 10,
-              background: "var(--nav-chip)",
-              color: "var(--nav-muted)",
-              cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}
           >
             <Icon name="sidebar-collapse" size={16} />
           </button>
         )}
       </div>
-      {collapsed && (
-        <div style={{ display: "flex", justifyContent: "center", paddingBottom: 8 }}>
+      {compact && (
+        <div className="sidebar-expand-wrap">
           <button
             type="button"
+            className="sidebar-collapse"
             onClick={() => setCollapsed(false)}
             aria-label="Expand sidebar"
             title="Expand sidebar"
-            style={{
-              width: 32, height: 32,
-              border: "none", borderRadius: 10,
-              background: "var(--nav-chip)",
-              color: "var(--nav-muted)",
-              cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}
           >
             <Icon name="sidebar-expand" size={16} />
           </button>
         </div>
       )}
 
-      <div style={{ flex: 1, padding: "8px 12px", overflowY: "auto" }}>
+      <div className="sidebar-nav">
         {items.map(item => {
           const active = page === item.id;
           return (
             <button
               key={item.id}
+              type="button"
+              className={`sidebar-link${active ? " active" : ""}${compact ? " compact" : ""}`}
               onClick={() => onNavigate(item.id)}
-              style={{
-                width: "100%", display: "flex", alignItems: "center",
-                gap: collapsed ? 0 : 12,
-                padding: collapsed ? "12px 0" : "11px 14px",
-                marginBottom: 4,
-                justifyContent: collapsed ? "center" : "flex-start",
-                background: active ? "var(--nav-active-bg)" : "transparent",
-                border: "none",
-                borderRadius: active ? 12 : 0,
-                color: active ? "var(--nav-active-text)" : "var(--nav-muted)",
-                cursor: "pointer", fontSize: 15,
-                fontWeight: active ? 600 : 500,
-                fontFamily: "inherit",
-              }}
             >
               <Icon name={item.icon} size={18} />
-              {!collapsed && <span>{item.label}</span>}
+              {!compact && <span>{item.label}</span>}
             </button>
           );
         })}
       </div>
 
       <SidebarAccount
-        collapsed={collapsed}
+        collapsed={compact}
         onOpenSettings={() => onNavigate("settings")}
       />
     </nav>

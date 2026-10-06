@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Sidebar, PageId, NAV_ITEMS } from "@/components/Sidebar";
-import { Topbar } from "@/components/Topbar";
+import { PageId, NAV_ITEMS } from "@/components/Sidebar";
+import { DashShell } from "@/components/DashShell";
 import { DashboardPage } from "@/components/pages/DashboardPage";
 import { MandatesPage } from "@/components/pages/MandatesPage";
 import { MandateDetailPage } from "@/components/pages/MandateDetailPage";
@@ -66,18 +66,14 @@ export function GDDDashboard() {
     : <SettingsPage />;
 
   return (
-    <div style={{ display: "flex", height: "100vh", overflow: "hidden", background: "var(--bg)", color: "var(--text)" }}>
-      <Sidebar page={page === "create" ? "mandates" : page} onNavigate={id => go(id as PageId)} />
-      <main style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-        <Topbar
-          heading={heading}
-          badge="GDD Regulator"
-          onSelect={openMandate}
-        />
-        <div className="dash-body">
-          {content}
-        </div>
-      </main>
-    </div>
+    <DashShell
+      page={page === "create" ? "mandates" : page}
+      onNavigate={id => go(id as PageId)}
+      heading={heading}
+      badge="GDD Regulator"
+      onSelect={openMandate}
+    >
+      {content}
+    </DashShell>
   );
 }
